@@ -12,11 +12,13 @@ class Solution:
         while l1 or l2:
             if l1:
                 s += l1.val
+                l1=l1.next
             if l2:
                 s += l2.val
+                l2=l2.next
             r.next = ListNode(s%10)
-            s=s/10
+            s=s//10
             r = r.next
         if s == 1:
             r.next = ListNode(1)
-        return h.next
+        return h.next        
