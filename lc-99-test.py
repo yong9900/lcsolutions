@@ -10,7 +10,6 @@ class Solution:
                         # but actually big
                         # it's the one swap forward
                         swap1 = smaller
-
                     #swap2 is the one suppose to be big
                     #but actually small
                     #it's the one swap backward
