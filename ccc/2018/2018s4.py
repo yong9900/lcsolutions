@@ -10,8 +10,8 @@ for file in filelist:
         #print("processing " + file)
         ipt=int(f.readline().strip())
         t1=time.time()
-        a=[0]*64000
         m=int(math.sqrt(ipt))
+        a=[0]*(2*m+1)
         
         def num(n):
             if n==1:
@@ -21,8 +21,8 @@ for file in filelist:
             while i<=n:
                 l=n//i
                 j=n//l
-                idx= (l if l<=m else m+n//l)
-                #print(idx)
+                idx= (l if l<=m else m+ipt//l)
+                #print( ipt, m, l, idx)
                 if a[idx] ==0:
                     a[idx] = num(l)
                 res+=(j-i+1)*a[idx]
