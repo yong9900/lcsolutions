@@ -13,7 +13,7 @@ for file in filelist:
         for i in range(r):
            b = [j for j in f.readline().strip()]
            for j in range(c):
-               if b[j]=='S':
+                if b[j]=='S':
                     srow,scol=i,j
                     ans[srow][scol]=0
                 if b[j]='C':
