@@ -5,19 +5,18 @@ import bisect
 import glob
 import time
 
-filelist = glob.glob('C:/Users/education/Downloads/2018/windows_data/S5/*.in')
+filelist = glob.glob('D:/download/windows_data/S5/*.in')
 for file in filelist:
     with open(file) as f:
+        print("opening file " + file)
         t1=time.time()
         n, m, p, q=[int(i) for i in f.readline().strip().split()]
         cityParents = [i for i in range(m)]
         planetParents = [i for i in range(n)]
         def root(i, map):
-            if map[i] == i:
-                return i
-            else:
+            if map[i] != i:
                 map[i] = root(map[i], map)
-                return map[i]
+            return map[i]
         
         energy,sum=0,0
         btwCity = []
@@ -39,28 +38,30 @@ for file in filelist:
             sum += i[2]
         energy += sum*m
 
-        pathWeight = []
-        pathSum = [0]
-        for i in btwCity:
-            root1 = root(i[0], cityParents)
-            root2 = root(i[1], cityParents) 
+        def process_one( index, linklist, parentlist, this_size, this_conn, that_conn ):
+            root1 = root(linklist[index][0], parentlist)
+            root2 = root(linklist[index][1], parentlist)
             if root1 != root2:
-                cityParents[root1] = root2
-                pathWeight.append(i[2])
-                pathSum.append(pathSum[-1] + i[2])
+                parentlist[root1]=root2
+                return (linklist[index][2]*(this_size-that_conn), this_conn+1)
+            else:
+                return (0, this_conn)
 
+        cityidx, planetidx=0, 0
+        citylinked, planetlinked = 0,0
         cost = 0
-        for i in btwPlanet:
-            root1 = root(i[0], planetParents)
-            root2 = root(i[1], planetParents) 
-            if root1 != root2:
-                planetParents[root1] = root2
-                if i[2]>=pathWeight[-1]:
-                    cost += i[2] + pathSum[-1]
-                else:
-                    j = bisect.bisect(pathWeight, i[2])
-                    cost=(m-j)*i[2] + pathSum[j] 
-        cost += pathSum[-1]
+        while cityidx < p or planetidx < q:
+            if planetidx == q or (cityidx < p and btwCity[cityidx][2] < btwPlanet[planetidx][2]):
+                one_result = process_one( cityidx, btwCity, cityParents, n, citylinked, planetlinked )
+                cost += one_result[0]
+                citylinked = one_result[1]
+                cityidx +=1
+            else:
+                one_result = process_one( planetidx, btwPlanet, planetParents, m, planetlinked, citylinked)
+                cost += one_result[0]
+                planetlinked = one_result[1]
+                planetidx +=1
+
         ans = energy-cost
         duration = time.time()-t1
         ofile = file.replace('.in', '.out')
@@ -70,6 +71,6 @@ for file in filelist:
             
         print("take {} seconds".format(duration))
         if ans == exp:
-            print("correct for " + file )
+            print("correct " )
         else:
-            print("wrong for " + file + ",exp:" + str(exp) + ",res:" + str(ans))
+            print("wrong " + ",exp:" + str(exp) + ",res:" + str(ans))
