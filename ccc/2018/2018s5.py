@@ -11,12 +11,12 @@ for file in filelist:
         print("opening file " + file)
         t1=time.time()
         n, m, p, q=[int(i) for i in f.readline().strip().split()]
-        cityParents = [i for i in range(m)]
-        planetParents = [i for i in range(n)]
+        cityParents = [(i,0) for i in range(m)]
+        planetParents = [(i,0) for i in range(n)]
         def root(i, map):
-            if map[i] != i:
-                map[i] = root(map[i], map)
-            return map[i]
+            if map[i][0] != i:
+                map[i] = (root(map[i][0], map), map[i][1])
+            return map[i][0]
         
         energy,sum=0,0
         btwCity = []
@@ -42,7 +42,13 @@ for file in filelist:
             root1 = root(linklist[index][0], parentlist)
             root2 = root(linklist[index][1], parentlist)
             if root1 != root2:
-                parentlist[root1]=root2
+                if (parentlist[root1][1] > parentlist[root2][1]):
+                    parentlist[root2] = (root1, parentlist[root2][1])
+                elif (parentlist[root1][1] < parentlist[root2][1]):
+                    parentlist[root1] = (root2, parentlist[root1][1])
+                else:
+                    parentlist[root1] = (root2,  parentlist[root1])
+                    parentlist[root2] = (root2, parentlist[root2][1]+1)
                 return (linklist[index][2]*(this_size-that_conn), this_conn+1)
             else:
                 return (0, this_conn)
@@ -50,8 +56,8 @@ for file in filelist:
         cityidx, planetidx=0, 0
         citylinked, planetlinked = 0,0
         cost = 0
-        while cityidx < p or planetidx < q:
-            if planetidx == q or (cityidx < p and btwCity[cityidx][2] < btwPlanet[planetidx][2]):
+        while citylinked < m-1 or planetlinked < n-1:
+            if planetlinked == n-1 or (citylinked < m-1 and btwCity[cityidx][2] < btwPlanet[planetidx][2]):
                 one_result = process_one( cityidx, btwCity, cityParents, n, citylinked, planetlinked )
                 cost += one_result[0]
                 citylinked = one_result[1]
