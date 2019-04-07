@@ -1,3 +1,4 @@
+
 i = int(input())
 
 count=0

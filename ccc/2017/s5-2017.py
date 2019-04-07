@@ -23,6 +23,8 @@ for file in filelist:
         for i in range(anum):
             action = list(map(int, f.readline().split()))
             if action[0]==2:
+
+                
                 line_act_offset[action[1]-1][1] -= 1
             else:
                 sum = 0

@@ -75,8 +75,6 @@ wn.onkey(decreasespeed, "Down")
 wn.listen()
 wn.tracer(3)
 
-deply = input("abc")
-
 while True:
     player.forward(speed)
     inscope(player)
@@ -94,4 +92,6 @@ while True:
             mypen.setposition(-290, 310)
             scoreString ='Score: %s' % score
             mypen.write(scoreString, False, align='left', font=("Arial", 14, 'normal'))
+
+deply = input("abc")
 

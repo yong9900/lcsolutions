@@ -1,2 +1,7 @@
-*.pyc
-*.json
+.gradle
+.vscode
+bin
+.classpath
+.project
+.settings
+**gradle**

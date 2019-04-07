@@ -1,6 +1,6 @@
 M = int(input())
 edges = []
-edges2 = {} #verifies if an edge leads to outside or to another pen; each edge should have a and b, the nodes they connect. 0 will be outside
+edges2 = {} 
 graph = []
 graph2 = []
 for i in range(1,M+1):
